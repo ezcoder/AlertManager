@@ -40,8 +40,9 @@ class AM {
                         stackup_spacing: " . $stackupSpacing . "
                     });";
         $currentAlerts = Session::get('Webcode-AM-Alerts');
-        $currentAlerts = str_replace("</script>", NULL, $currentAlerts);
-        $currentAlerts = $currentAlerts . $newAlert . "</script>";
+        $currentAlerts = str_replace("<!-- AlertManager --><script>", NULL, $currentAlerts);
+        $currentAlerts = str_replace("</script><!-- /AlertManager -->", NULL, $currentAlerts);
+        $currentAlerts = "<!-- AlertManager --><script>" . $currentAlerts . $newAlert . "</script><!-- /AlertManager -->";
         Session::flash('Webcode-AM-Alerts', $currentAlerts);
     }
 
