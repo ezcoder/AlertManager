@@ -23,6 +23,22 @@ class AM {
         self::_setAlert('danger', $msg, $title);
     }
 
+    public static function getAlerts() {
+        $alerts = Session::get('Webcode-AM-Alerts');
+        Session::set('Webcode-AM-Alerts', NULL);
+        /*
+        $alerts = '<script src="' .
+                Config::get('alertmanager::growlJS') . 
+                '"></script>' . PHP_EOL . 
+                $alerts;
+         * *
+         */
+        return "<script>" . PHP_EOL .
+                file_get_contents(__DIR__ . './bootstrapGrowl.js') . PHP_EOL .
+                "</script>" . PHP_EOL . 
+                $alerts;
+    }
+
     private static function _setAlert($class, $msg, $title) {
         $offset = Config::get('alertmanager::offset');
         $align = Config::get('alertmanager::align');
@@ -30,7 +46,8 @@ class AM {
         $delay = Config::get('alertmanager::delay');
         $allowDismiss = Config::get('alertmanager::allowDismiss');
         $stackupSpacing = Config::get('alertmanager::stackupSpacing');
-        $newAlert = "$.bootstrapGrowl('<strong>" . $title . ":</strong> " . $msg . "', {
+        $newAlert = "$.bootstrapGrowl('<strong>" . 
+                $title . ":</strong> " . $msg . "', {
                         type: '" . $class . "',
                         offset: " . $offset . ",
                         align: " . $align . ",
@@ -42,8 +59,12 @@ class AM {
         $currentAlerts = Session::get('Webcode-AM-Alerts');
         $currentAlerts = str_replace("<!-- AlertManager --><script>", NULL, $currentAlerts);
         $currentAlerts = str_replace("</script><!-- /AlertManager -->", NULL, $currentAlerts);
-        $currentAlerts = "<!-- AlertManager --><script>" . $currentAlerts . $newAlert . "</script><!-- /AlertManager -->";
-        Session::flash('Webcode-AM-Alerts', $currentAlerts);
+        $currentAlerts = "<!-- AlertManager --><script>" . PHP_EOL .
+                $currentAlerts . 
+                $newAlert . 
+                PHP_EOL . 
+                "</script><!-- /AlertManager -->" .PHP_EOL;
+        Session::set('Webcode-AM-Alerts', $currentAlerts);
     }
 
 }
