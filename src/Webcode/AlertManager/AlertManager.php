@@ -5,7 +5,7 @@ namespace Webcode\AlertManager;
 use \Session;
 use \Config;
 
-class AM {
+class AlertManager {
 
     public static function setInfo($msg, $title = "Information") {
         self::_setAlert('info', $msg, $title);
@@ -34,7 +34,7 @@ class AM {
          * *
          */
         return "<script>" . PHP_EOL .
-                file_get_contents(__DIR__ . './bootstrapGrowl.js') . PHP_EOL .
+                file_get_contents(__DIR__ . '/bootstrapGrowl.js') . PHP_EOL .
                 "</script>" . PHP_EOL . 
                 $alerts;
     }
